@@ -1,0 +1,10 @@
+torch==2.13.0
+torchvision==0.28.0
+numpy==2.2.6
+pandas
+matplotlib
+scikit-learn
+scipy
+ripser==0.6.15
+persim
+jupyter

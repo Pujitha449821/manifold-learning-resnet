@@ -1,0 +1,5 @@
+Measure,Pearson_r,Interpretation
+H0 vs Relative Depth,0.9954435242684359,Layer-wise relationship
+H1 vs Relative Depth,0.9610735208758241,Layer-wise relationship
+PHdim vs Relative Depth,-0.8525720059220204,Layer-wise relationship
+Topology vs Test Accuracy,,Not estimable: one checkpoint

@@ -1,0 +1,2 @@
+Model,Train_Accuracy,Test_Accuracy,Generalization_Gap,Final_H0,Final_H1,Final_PHdim
+ResNet Epoch 1,25.36,23.5,1.8599999999999994,1411.6602493524551,84.44485354423523,4.388906301243683
