@@ -131,6 +131,7 @@ The implementation follows the paper-supported characteristics used for the repr
 
 The general flow of the network is:
 
+```text
 Input Image
      ↓
 Initial Convolution
@@ -150,6 +151,7 @@ Global Average Pooling
 Fully Connected Layer
      ↓
 10-Class Output
+```
 
 Each structural block produces an internal feature representation that is later extracted for the manifold and topological analysis.
 
