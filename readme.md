@@ -356,3 +356,424 @@ Comparison Across Network Depth
 ```
 
 These descriptors provide a quantitative way to study how the topology of the ResNet representations changes from the first structural block to the final structural block.
+
+## Persistent Homological Fractal Dimension (PHdim)
+
+Persistent Homological Fractal Dimension (PHdim) was implemented to quantify the scaling behavior of the persistent-homology descriptors as the number of sampled points increases.
+
+For the PHdim analysis in this project, the following configuration was used:
+
+- Homology dimension: H₀
+- Power parameter: α = 1
+- Sample sizes: 50, 100, 150, 200, 250, 300
+
+The H₀ persistence descriptor was calculated for each sample size. The scaling relationship was then analyzed using logarithmic transformation and linear regression.
+
+The fitted relationship is:
+
+```text
+log10(E₁⁰) = β log10(n) + c
+```
+
+where:
+
+- `n` is the number of sampled points
+- `E₁⁰` is the H₀ persistence-based descriptor
+- `β` is the scaling exponent
+- `c` is the regression intercept
+
+PHdim was calculated using the formulation:
+
+```text
+PHdim = α / (1 − β)
+```
+
+For the Block 1 pilot experiment, the implementation produced:
+
+```text
+β  = 0.8062056
+R² = 0.9979870
+PHdim ≈ 5.16
+```
+
+The PHdim calculation was first verified on Block 1 and was then applied to the representations from all 10 structural blocks.
+
+The resulting PHdim values are used to study how the estimated geometric complexity of the representations changes across network depth.
+
+These values should be interpreted as estimates obtained from the computationally constrained experiment and are not claimed to be exact reproductions of the paper's reported values.
+
+## Layer-wise Analysis
+
+The internal representations were analyzed across all 10 structural blocks of the ResNet.
+
+To compare the representations according to network depth, the structural blocks were represented using relative depth:
+
+```text
+Block 1  → 0.1
+Block 2  → 0.2
+Block 3  → 0.3
+Block 4  → 0.4
+Block 5  → 0.5
+Block 6  → 0.6
+Block 7  → 0.7
+Block 8  → 0.8
+Block 9  → 0.9
+Block 10 → 1.0
+```
+
+For every structural block, the following quantities were analyzed:
+
+- H₀ topological descriptor
+- H₁ topological descriptor
+- PHdim
+
+The same 300-point sampling strategy was used across the blocks so that the resulting topological measurements could be compared consistently.
+
+The layer-wise analysis produces both numerical tables and visualizations. The numerical results are stored in:
+
+```text
+results/tables/
+```
+
+and the generated plots are stored in:
+
+```text
+results/figures/
+```
+
+The resulting measurements allow us to examine how the topological and geometric properties of the learned representations evolve from shallow to deeper parts of the network.
+
+## Results
+
+The completed experiment produced layer-wise measurements of the internal ResNet representations using persistent homology and PHdim.
+
+The main quantities analyzed across the 10 structural blocks are:
+
+- H₀ topological descriptor
+- H₁ topological descriptor
+- PHdim
+
+The experiment also generated visualizations showing how these measurements change with relative network depth.
+
+### Generated Figures
+
+The main figures are available in:
+
+```text
+results/figures/
+```
+
+They include:
+
+- `resnet_epoch1_H0_vs_depth.png`
+- `resnet_epoch1_H1_vs_depth.png`
+- `resnet_epoch1_PHdim_vs_depth.png`
+- `resnet_epoch1_normalized_topology.png`
+
+### Numerical Results
+
+The corresponding numerical outputs are available in:
+
+```text
+results/tables/
+```
+
+These include:
+
+- `resnet_epoch1_accuracy_topology_summary.csv`
+- `resnet_epoch1_final_graph_data.csv`
+- `resnet_epoch1_layerwise_report_table.csv`
+- `resnet_epoch1_layerwise_topology.csv`
+
+Additional analysis output is available in:
+
+```text
+results/analysis/
+```
+
+including:
+
+- `resnet_epoch1_correlation_summary.csv`
+
+### Interpretation
+
+The results demonstrate that the internal representations of the ResNet exhibit measurable changes in their topological properties across network depth.
+
+The H₀ and H₁ descriptors provide quantitative measurements of persistent topological structures, while PHdim provides an additional measure based on the scaling behavior of the persistence descriptor.
+
+Because this experiment was limited to one model and one training epoch, the observed layer-wise behavior should be interpreted as the result of this specific computational experiment rather than as a general conclusion about fully trained neural networks.
+
+The results are therefore presented primarily as a demonstration of the implemented manifold-learning and topological-analysis methodology.
+
+## Accuracy and Topology Analysis
+
+The project also examined the available model-performance and topological measurements together.
+
+The trained ResNet produced the following performance after one epoch:
+
+| Metric | Result |
+|---|---:|
+| Training Accuracy | 25.36% |
+| Test Accuracy | 23.50% |
+
+The topology analysis was performed on the internal representations extracted from the 10 structural blocks.
+
+However, a statistically meaningful topology–accuracy correlation was **not established from this experiment**.
+
+The main reason is that the experiment contains only:
+
+```text
+1 model
+1 training epoch
+1 trained checkpoint
+```
+
+A correlation across training requires multiple observations from different training states. The original paper analyzes topology and accuracy across multiple training stages and also considers multiple trained models for its broader generalization analysis.
+
+Therefore, the correlation values reported in the original paper are **not presented as results of this project**.
+
+The current experiment instead demonstrates how accuracy and topological measurements can be collected within the same analysis pipeline.
+
+Reproducing the paper's topology–accuracy correlation would require additional training epochs and/or multiple independently trained models, which was outside the computational scope of this CPU-based short project.
+
+## Comparison with the Research Paper
+
+The implementation follows the main methodological ideas presented in the research paper, while reducing the experimental scope because of computational constraints.
+
+| Aspect | Original Research Paper | This Project |
+|---|---|---|
+| Architecture scope | Multiple architectures | ResNet only |
+| Dataset scope | Multiple datasets | CIFAR-10 |
+| ResNet structural blocks | 10 | 10 |
+| Feature channels | 128 | 128 |
+| CNN vectorization | Global Average Pooling | Global Average Pooling |
+| Persistent homology | Vietoris-Rips | Vietoris-Rips |
+| Homology dimensions | H₀ and H₁ | H₀ and H₁ |
+| Topological descriptors | Used | Implemented |
+| PHdim | Used | Implemented |
+| Training | Models trained to high training accuracy | 1 epoch |
+| Dataset scale | Larger/full experimental settings | Balanced 5,000/1,000 subset |
+| Computational environment | GPU-based experiments | CPU-only |
+| Layer-wise analysis | Performed | Performed |
+| Topology–accuracy analysis | Multiple training states/models | Not statistically established |
+
+The project therefore reproduces the **core computational methodology** of the paper while reducing the experimental scope to make the implementation feasible in the available computational environment.
+
+The differences in dataset size, training duration, architecture scope, and sampling strategy should be considered when comparing the results with those reported in the original research.
+
+## What Was Followed from the Paper vs. Our Choices
+
+The project distinguishes between the methodology derived from the research paper and the practical decisions made to make the experiment computationally feasible.
+
+### Methodological Elements Followed from the Paper
+
+The following aspects were based on the methodology described in the research paper:
+
+- Analysis of internal neural-network representations
+- Analysis across structural blocks
+- 10 structural blocks for the ResNet analysis
+- 128 feature channels
+- Global Average Pooling for CNN feature-map vectorization
+- Vietoris-Rips persistent homology
+- H₀ and H₁ analysis
+- Persistence-based topological descriptors
+- Persistent Homological Fractal Dimension (PHdim)
+- Layer-wise analysis of representations
+
+### Practical Choices Made in This Project
+
+The following choices were made specifically for this computational reproduction:
+
+- ResNet-only architecture scope
+- CIFAR-10-only dataset scope
+- 5,000 training samples
+- 1,000 test samples
+- 500 training samples per class
+- 100 test samples per class
+- One training epoch
+- Adam optimizer
+- Learning rate of 0.001
+- Batch size of 128
+- CPU-based training
+- 300-point sample for the final layer-wise persistent-homology analysis
+
+These choices were made because the project was developed in a CPU-only environment and the complete experimental scope of the research paper would require substantially greater computational resources.
+
+Therefore, the project should be viewed as a focused implementation of the paper's methodology rather than a full replication of every experiment.
+
+## Limitations
+
+The current implementation has several limitations that should be considered when interpreting the results.
+
+### 1. Single Architecture
+
+Only ResNet was implemented, whereas the original research paper investigates multiple neural-network architectures.
+
+### 2. Reduced Dataset
+
+A balanced subset of CIFAR-10 was used instead of the full dataset in order to keep training computationally manageable.
+
+### 3. One Training Epoch
+
+The model was trained for only one epoch because of the available CPU-only computational resources.
+
+The original paper trains its models to substantially higher training accuracy.
+
+### 4. Limited Persistent-Homology Sample Size
+
+A common 300-point sample was used for the final layer-wise persistent-homology analysis.
+
+This was necessary because persistent-homology computation becomes increasingly expensive as the number of points and representation dimensionality increase.
+
+### 5. Single Training Checkpoint
+
+Only one trained checkpoint was available.
+
+Consequently, the project cannot establish the paper's multi-epoch topology–accuracy relationship.
+
+### 6. No Paper-Style Correlation Result
+
+The topology–accuracy correlations reported in the original research were not reproduced in this project because multiple training states and/or multiple trained models would be required.
+
+### 7. Practical ResNet Implementation
+
+The exact source implementation used in the original paper was not available in sufficient detail to establish an identical implementation.
+
+Therefore, a CIFAR-10-compatible ResNet was implemented following the relevant architectural characteristics described in the paper.
+
+### Overall Limitation
+
+These constraints mean that this project should be considered a **practical methodological reproduction and implementation study**, rather than a complete numerical replication of the original research paper.
+
+## Repository Structure
+
+The repository is organized to separate the model checkpoint, experimental notebooks, and generated results.
+
+```text
+manifold-learning-resnet/
+│
+├── models/
+│   └── resnet_cifar10_epoch1.pth
+│
+├── notebooks/
+│   ├── 01_environment_setup.ipynb
+│   ├── 02_cifar10_preprocessing.ipynb
+│   ├── 03_resnet_setup.ipynb
+│   ├── 04_training.ipynb
+│   ├── 05_representation_extraction.ipynb
+│   ├── 06_representation_verification.ipynb
+│   ├── 07_persistent_homology.ipynb
+│   ├── 08_topological_descriptors.ipynb
+│   ├── 09_phdim.ipynb
+│   ├── 10_layerwise_analysis.ipynb
+│   ├── 11_accuracy_topology_analysis.ipynb
+│   ├── 12_graphs.ipynb
+│   └── 13_correlation_analysis.ipynb
+│
+├── results/
+│   ├── analysis/
+│   │   └── resnet_epoch1_correlation_summary.csv
+│   │
+│   ├── figures/
+│   │   ├── resnet_epoch1_H0_vs_depth.png
+│   │   ├── resnet_epoch1_H1_vs_depth.png
+│   │   ├── resnet_epoch1_PHdim_vs_depth.png
+│   │   └── resnet_epoch1_normalized_topology.png
+│   │
+│   └── tables/
+│       ├── resnet_epoch1_accuracy_topology_summary.csv
+│       ├── resnet_epoch1_final_graph_data.csv
+│       ├── resnet_epoch1_layerwise_report_table.csv
+│       └── resnet_epoch1_layerwise_topology.csv
+│
+├── .gitignore
+├── readme.md
+└── requirements.txt
+```
+
+### Folder Description
+
+| Folder/File | Purpose |
+|---|---|
+| `models/` | Contains the trained ResNet checkpoint |
+| `notebooks/` | Contains the complete experimental workflow |
+| `results/analysis/` | Contains additional analysis outputs |
+| `results/figures/` | Contains the generated topology plots |
+| `results/tables/` | Contains numerical result tables |
+| `.gitignore` | Excludes datasets, intermediate files, and temporary files |
+| `requirements.txt` | Lists the Python dependencies required for the project |
+| `readme.md` | Project documentation |
+
+The CIFAR-10 dataset and intermediate `.pt` tensor files are intentionally excluded from the repository because they are not required to understand the final reported results and would increase repository size.
+
+## Notebook Execution Order
+
+The notebooks are organized as a sequential experimental pipeline. They should generally be executed in the following order:
+
+```text
+01 → Environment Setup
+02 → CIFAR-10 Preprocessing
+03 → ResNet Setup
+04 → Training
+05 → Representation Extraction
+06 → Representation Verification
+07 → Persistent Homology
+08 → Topological Descriptors
+09 → PHdim
+10 → Layer-wise Analysis
+11 → Accuracy / Topology Analysis
+12 → Graph Generation
+13 → Correlation Analysis
+```
+
+### Notebook Descriptions
+
+| Notebook | Purpose |
+|---|---|
+| `01_environment_setup.ipynb` | Set up and verify the Python environment |
+| `02_cifar10_preprocessing.ipynb` | Load and prepare the CIFAR-10 subset |
+| `03_resnet_setup.ipynb` | Define and verify the ResNet architecture |
+| `04_training.ipynb` | Train and evaluate the ResNet |
+| `05_representation_extraction.ipynb` | Extract representations from the 10 structural blocks |
+| `06_representation_verification.ipynb` | Verify representation shapes and numerical validity |
+| `07_persistent_homology.ipynb` | Compute H₀ and H₁ persistent homology |
+| `08_topological_descriptors.ipynb` | Calculate persistence-based topological descriptors |
+| `09_phdim.ipynb` | Calculate Persistent Homological Fractal Dimension |
+| `10_layerwise_analysis.ipynb` | Analyze topology across network depth |
+| `11_accuracy_topology_analysis.ipynb` | Examine available accuracy and topology measurements |
+| `12_graphs.ipynb` | Generate final figures and result tables |
+| `13_correlation_analysis.ipynb` | Analyze correlation-related outputs and document the limitations of the available data |
+
+The notebooks together form the complete experimental workflow used in this project.
+
+## Environment & Requirements
+
+The project was developed and tested in a CPU-only environment.
+
+### Main Software Requirements
+
+- Python 3.10
+- PyTorch
+- Torchvision
+- NumPy
+- Pandas
+- Matplotlib
+- Scikit-learn
+- SciPy
+- Ripser
+- Persim
+- Jupyter Notebook
+
+The dependency information used for the project is provided in:
+
+```text
+requirements.txt
+```
+
+The notebooks are designed to be executed in a Python environment with the required dependencies installed.
+
+### Hardware Consideration
+
+The experiments were performed using CPU computation. No CUDA/GPU acceleration was used for the reported experiment.
+
+Because persistent-homology calculations can be computationally expensive for high-dimensional point clouds, the project uses reduced dataset and sampling sizes as described in the earlier sections.
