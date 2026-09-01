@@ -777,3 +777,192 @@ The notebooks are designed to be executed in a Python environment with the requi
 The experiments were performed using CPU computation. No CUDA/GPU acceleration was used for the reported experiment.
 
 Because persistent-homology calculations can be computationally expensive for high-dimensional point clouds, the project uses reduced dataset and sampling sizes as described in the earlier sections.
+
+## Installation and How to Run
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Pujitha449821/manifold-learning-resnet.git
+cd manifold-learning-resnet
+```
+
+### 2. Create the Python Environment
+
+Using Conda:
+
+```bash
+conda create -n manifold_learning python=3.10
+conda activate manifold_learning
+```
+
+### 3. Install Dependencies
+
+Install the required packages using:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Launch Jupyter Notebook
+
+```bash
+jupyter notebook
+```
+
+Open the `notebooks/` directory and execute the notebooks in the order described in the **Notebook Execution Order** section.
+
+### 5. Dataset
+
+The CIFAR-10 dataset is not included in this repository.
+
+The dataset should be downloaded separately and prepared according to the preprocessing steps in:
+
+```text
+notebooks/02_cifar10_preprocessing.ipynb
+```
+
+### 6. Using the Existing Checkpoint
+
+The trained one-epoch ResNet checkpoint is provided in:
+
+```text
+models/resnet_cifar10_epoch1.pth
+```
+
+This allows the later representation-extraction and topological-analysis stages to be examined without necessarily retraining the model.
+
+### 7. Reproducing the Analysis
+
+The complete workflow is:
+
+```text
+Environment Setup
+       ↓
+CIFAR-10 Preprocessing
+       ↓
+ResNet Setup
+       ↓
+Training
+       ↓
+Representation Extraction
+       ↓
+Representation Verification
+       ↓
+Persistent Homology
+       ↓
+Topological Descriptors
+       ↓
+PHdim
+       ↓
+Layer-wise Analysis
+       ↓
+Accuracy / Topology Analysis
+       ↓
+Graph Generation
+       ↓
+Correlation Analysis
+```
+
+The generated figures and numerical results are stored in the `results/` directory.
+
+## Results and Output Files
+
+The final experimental outputs are organized inside the `results/` directory.
+
+### Figures
+
+The `results/figures/` directory contains the main visualizations produced by the experiment:
+
+- `resnet_epoch1_H0_vs_depth.png` — H₀ descriptor across relative network depth
+- `resnet_epoch1_H1_vs_depth.png` — H₁ descriptor across relative network depth
+- `resnet_epoch1_PHdim_vs_depth.png` — PHdim across relative network depth
+- `resnet_epoch1_normalized_topology.png` — normalized combined topology analysis
+
+### Tables
+
+The `results/tables/` directory contains the numerical outputs used for reporting and visualization:
+
+- `resnet_epoch1_accuracy_topology_summary.csv`
+- `resnet_epoch1_final_graph_data.csv`
+- `resnet_epoch1_layerwise_report_table.csv`
+- `resnet_epoch1_layerwise_topology.csv`
+
+### Analysis
+
+The `results/analysis/` directory contains:
+
+- `resnet_epoch1_correlation_summary.csv`
+
+These files provide the numerical and visual outputs of the completed experiment and allow the reported results to be inspected without rerunning the complete computational pipeline.
+
+The trained model checkpoint is separately available in:
+
+```text
+models/resnet_cifar10_epoch1.pth
+```
+
+Intermediate representation and persistent-homology tensor files are excluded from the repository through `.gitignore`.
+
+## Computational Constraints
+
+The complete experimental methodology described in the original research paper is computationally demanding, particularly when training multiple architectures and repeatedly calculating persistent homology on high-dimensional representations.
+
+This project was developed in a **CPU-only environment**. Therefore, several practical reductions were necessary to make the experiment feasible.
+
+The main computational adaptations were:
+
+- Only ResNet was implemented.
+- A balanced CIFAR-10 subset was used.
+- The model was trained for only one epoch.
+- A 300-point sample was used for the final layer-wise persistent-homology analysis.
+- Only the required H₀ and H₁ homology dimensions were analyzed.
+
+The one-epoch training experiment itself required approximately **21.53 minutes** in the CPU-based environment.
+
+These computational constraints are important when interpreting the results. The experiment demonstrates the implementation of the methodology, but it does not reproduce the complete scale of the experiments performed in the original research paper.
+
+A full reproduction would require substantially greater computational resources, longer training, multiple training checkpoints, and additional neural-network architectures.
+
+## Conclusion
+
+This project implemented the core manifold-learning and topological-analysis methodology described in the research paper for a ResNet-based CIFAR-10 experiment.
+
+A custom 10-block ResNet with 128 feature channels was trained, and internal representations were extracted from all structural blocks. Global Average Pooling was used to convert the feature maps into 128-dimensional representations, which were then analyzed using Vietoris-Rips persistent homology.
+
+The analysis included H₀ and H₁ persistence, persistence-based topological descriptors, and Persistent Homological Fractal Dimension (PHdim). These measurements were used to study how the internal representation changes across network depth.
+
+Because the project was developed in a CPU-only environment, the experimental scope was intentionally reduced to one ResNet model, a balanced CIFAR-10 subset, one training epoch, and a 300-point sample for the final persistent-homology analysis.
+
+Therefore, the results should be considered a **practical methodological reproduction** rather than a complete replication of the original paper's multi-architecture and multi-epoch experiments.
+
+In particular, the available experiment does not provide enough training states or independently trained models to establish the topology–accuracy correlations reported in the original research.
+
+Overall, the project demonstrates how persistent homology and related topological measurements can be used to quantitatively study the evolution of internal neural-network representations beyond conventional classification accuracy.
+
+## Future Extensions
+
+With additional computational resources, the project could be extended by:
+
+- Training the ResNet for substantially more epochs.
+- Collecting representations from multiple training checkpoints.
+- Reproducing the topology–accuracy analysis across training.
+- Training multiple ResNet-family configurations.
+- Extending the analysis to the other architectures studied in the paper.
+- Using larger datasets and larger persistent-homology samples.
+- Performing repeated sampling and averaging for more robust estimates.
+- Reproducing the broader multi-model experiments from the original research.
+
+## Reference
+
+**Magai, German.**
+
+*Deep Neural Networks Architectures from the Perspective of Manifold Learning.*
+
+This project is based on the methodology presented in the above research paper.
+
+## Team Members
+
+- **Pujitha V**
+- **Bhavana D**
+- **Soumithri Ch**
