@@ -155,8 +155,51 @@ Fully Connected Layer
 
 Each structural block produces an internal feature representation that is later extracted for the manifold and topological analysis.
 
-Model Parameters:
+### Model Parameters
+
+```text
 Total parameters       : 2,959,242
 Trainable parameters   : 2,959,242
+```
+
+The ResNet implementation is a practical reproduction.
+
+## Training
+
+The ResNet model was trained on the balanced CIFAR-10 subset using a CPU-based environment.
+
+### Training Configuration
+
+| Parameter | Value |
+|---|---|
+| Optimizer | Adam |
+| Loss Function | CrossEntropyLoss |
+| Learning Rate | 0.001 |
+| Batch Size | 128 |
+| Device | CPU |
+| Training Epochs | 1 |
+
+### Training Results
+
+The one-epoch experiment achieved:
+
+| Metric | Result |
+|---|---:|
+| Training Accuracy | 25.36% |
+| Test Accuracy | 23.50% |
+
+The trained model checkpoint is:
+
+```text
+models/resnet_cifar10_epoch1.pth
+```
+
+### Important Reproduction Note
+
+The original research paper trained its models until they reached at least approximately 95% training accuracy.
+
+In this project, training was intentionally limited to one epoch because of the available CPU-only computational resources.
+
+Therefore, the model obtained in this experiment is not considered a fully trained reproduction of the models in the original paper. Instead, it is used to implement and validate the subsequent representation-extraction and topological-analysis pipeline.
 
 The ResNet implementation is a practical reproduction. The original paper does not provide complete source code for the exact ResNet implementation used in its experiments, so the model used here is a CIFAR-10-compatible implementation designed to follow the relevant architectural characteristics described in the paper.
