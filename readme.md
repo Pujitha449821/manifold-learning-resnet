@@ -74,7 +74,7 @@ Our implementation was performed in a **CPU-only environment**. Training and per
 
 We selected ResNet as a focused case study so that we could implement the complete analysis pipeline:
 
-```text
+
 Model Training
       ↓
 Internal Representation Extraction
@@ -131,7 +131,6 @@ The implementation follows the paper-supported characteristics used for the repr
 
 The general flow of the network is:
 
-```text
 Input Image
      ↓
 Initial Convolution
